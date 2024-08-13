@@ -1,11 +1,17 @@
-#pragma once
+// Copyright 2024 Sean Baxter
+// Copyright 2024 Christian Mazakas
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#pragma once
 #feature on safety
+
+#include <safe-cxx/string_constant.hxx>
 
 #include <string>
 #include <cstddef>
 
-namespace safecxx
+namespace std2
 {
 
 template<class CharT, class Traits = std::char_traits<CharT>>
@@ -32,9 +38,9 @@ public:
   using traits_type            = Traits;
   using value_type             = CharT;
   using pointer                = value_type*;
-  using const_pointer          = value_type const*;
+  using const_pointer          = const value_type*;
   using reference              = value_type&;
-  using const_reference        = value_type const&;
+  using const_reference        = const value_type&;
   // using const_iterator         = implementation-defined; // see [string.view.iterators]
   // using iterator               = const_iterator;201
   // using const_reverse_iterator = reverse_iterator<const_iterator>;
@@ -45,9 +51,18 @@ public:
 
   basic_string_view() = delete;
 
-  basic_string_view(const [value_type; dyn]^ str) noexcept safe
-  : p_(str)
+  basic_string_view(string_constant<value_type> sc) noexcept safe
+    : p_(sc.text())
   {
+  }
+
+  basic_string_view(const [value_type; dyn]^ str) noexcept safe
+    : p_(str)
+  {
+  }
+
+  value_type const* data(self) noexcept safe {
+    return (*self.p_)~as_pointer;
   }
 
   size_type size(self) noexcept safe {
@@ -58,4 +73,4 @@ private:
   const [value_type; dyn]^/a p_;
 };
 
-}
+} // namespace std2
