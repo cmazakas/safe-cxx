@@ -1,20 +1,23 @@
 #feature on safety
 
 #include <safe-cxx/string_view.hxx>
+#include <safe-cxx/string_constant.hxx>
 
 template<class T, class U>
-void assert_eq(T^ t, U^ u) safe
+void assert_eq(T const^ t, U const^ u) safe
 {
   if (*t != *u) throw;
 }
 
 void string_view_constructor() safe
 {
-  const [char; dyn]^/static str = "hello, world!";
+  std2::string_constant<char> sc("rawr");
+
+  const [char; dyn]^ str = "hello, world!";
 
   safecxx::string_view sv = str;
 
-  assert_eq(^sv.size(), ^0u);
+  assert_eq(sv.size(), 0u);
 }
 
 int main() {
