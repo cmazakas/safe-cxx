@@ -8,13 +8,13 @@
 
 #include <safe-cxx/string_constant.hxx>
 
-#include <string>
 #include <cstddef>
+#include <cstring>
 
 namespace std2
 {
 
-template<class CharT, class Traits = std::char_traits<CharT>>
+template<class CharT>
 class basic_string_view/(a);
 
 // C++-style typedefs.
@@ -31,11 +31,10 @@ using u8str  = basic_string_view<char8_t>;
 using u16str = basic_string_view<char16_t>;
 using u32str = basic_string_view<char32_t>;
 
-template<class CharT, class Traits>
+template<class CharT>
 class basic_string_view/(a)
 {
 public:
-  using traits_type            = Traits;
   using value_type             = CharT;
   using pointer                = value_type*;
   using const_pointer          = const value_type*;
@@ -67,6 +66,13 @@ public:
 
   size_type size(self) noexcept safe {
       return (*self.p_)~length;
+  }
+
+  bool operator==(self, basic_string_view rhs) noexcept safe {
+    if(self.size() != rhs.size()) {
+      return false;
+    }
+    unsafe return !std::memcmp(self.data(), rhs.data(), sizeof(value_type) * self.size());
   }
 
 private:
