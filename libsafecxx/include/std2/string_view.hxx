@@ -6,7 +6,7 @@
 #pragma once
 #feature on safety
 
-#include <safe-cxx/string_constant.hxx>
+#include <std2/string_constant.hxx>
 
 #include <cstddef>
 #include <cstring>
